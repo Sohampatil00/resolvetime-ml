@@ -29,7 +29,7 @@ git status --short
 git diff --cached --stat
 ```
 
-Staged files should be application source, tests, documentation, workflow configuration, and requirements. `.venv/`, `data/`, `models/`, `results/`, and secrets are excluded by `.gitignore`. The aggregate snapshot `docs/evaluation.json` is intentionally included, along with the interface image.
+Staged files should be application source, tests, documentation, workflow configuration, requirements, and the selected `models/resolution_model.joblib` required for cloud inference. `.venv/`, `data/`, `results/`, other model artifacts, and secrets are excluded by `.gitignore`. The aggregate snapshot `docs/evaluation.json` and interface image are intentionally included.
 
 ## 3. Commit and push
 

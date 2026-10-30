@@ -30,4 +30,4 @@ Include Python and package versions, the command or interface action, the full e
 
 ## Data and generated files
 
-Raw data, trained joblib files, virtual environments, and generated predictions stay outside Git. The dataset downloader records source attribution and hashes. Documentation may include aggregate evaluation snapshots, clearly identified as historical measurements rather than new test results.
+Raw data, virtual environments, generated predictions, and additional model artifacts stay outside Git. The selected `models/resolution_model.joblib` is included for Streamlit cloud inference. If replacing it, keep its dependencies, reference evaluation, and presentation claims consistent. The dataset downloader records source attribution and hashes. Documentation may include aggregate evaluation snapshots, clearly identified as historical measurements rather than new test results.

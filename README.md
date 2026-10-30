@@ -21,17 +21,14 @@ Built for Assignment 10 of the 2026–27 Machine Learning Laboratory manual, cov
 
 ## Quick start
 
-Use **Python 3.11**. The recorded package environment is provided in `requirements-lock.txt`; `requirements.txt` contains broader compatibility ranges.
+Use **Python 3.11**. `requirements.txt` includes the recorded environment in `requirements-lock.txt` so local and cloud inference use the saved model's dependency versions.
 
 ```bash
 git clone https://github.com/Sohampatil00/resolvetime-ml.git
 cd resolvetime-ml
 python3.11 -m venv .venv
 source .venv/bin/activate
-python -m pip install -r requirements-lock.txt
-python download_data.py
-python -m unittest discover -s tests -v
-python train.py
+python -m pip install -r requirements.txt
 python -m streamlit run app.py --server.port 8502
 ```
 
@@ -39,16 +36,18 @@ Open **[http://localhost:8502](http://localhost:8502)**. Stop the server with **
 
 If `python3.11` is unavailable, use an installed Python 3.11+ interpreter in the environment-creation command. On Windows, use `py -3.11 -m venv .venv` and activate with `.venv\Scripts\Activate.ps1`.
 
-The first download requires internet. Training runs locally on CPU. Raw data and the trained model are generated locally and excluded from Git. Do not skip training on a fresh clone. To replace an existing model intentionally:
+The selected trained model is included for inference, so a fresh clone can launch without downloading the dataset or retraining. Raw data and generated reports remain excluded from Git. To reproduce training locally and replace the selected model intentionally:
 
 ```bash
+python download_data.py
+python -m unittest discover -s tests -v
 python train.py --overwrite
 ```
 
 If downloading manually, get the ZIP from the UCI page, extract `incident_event_log.csv`, and place it at `data/raw/incident_event_log.csv`. Alternatively:
 
 ```bash
-python train.py --data "/path/to/incident_event_log.csv"
+python train.py --data "/path/to/incident_event_log.csv" --overwrite
 ```
 
 ## Dataset
@@ -153,6 +152,21 @@ The UI requires a real trained artifact and does not manufacture demo prediction
 
 See [PRESENTATION_GUIDE.md](PRESENTATION_GUIDE.md) for exact demo inputs, a speaking script, syllabus mapping, saved metrics, and viva answers. Update the guide's saved-run numbers after retraining.
 
+## Deploy on Streamlit Community Cloud
+
+Push the repository including `models/resolution_model.joblib`. Then open [Streamlit Community Cloud](https://share.streamlit.io/), create an app, and enter:
+
+| Setting | Value |
+| --- | --- |
+| Repository | `Sohampatil00/resolvetime-ml` |
+| Branch | `main` |
+| Main file | `app.py` |
+| Advanced settings → Python | `3.11` |
+
+Click **Deploy**. No secrets, database, or cloud retraining are needed. Streamlit installs `requirements.txt`, which includes the recorded package versions. Deployment is a separate step from pushing to GitHub.
+
+See [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md) for exact push commands, platform steps, and troubleshooting. No live app URL is claimed until deployment completes.
+
 ## Files and outputs
 
 ```text
@@ -163,15 +177,16 @@ train.py                       Preparation, tuning, selection, final evaluation
 resolvetime/data.py            Snapshots, date parsing, features, chronological splits
 resolvetime/modeling.py        Preprocessing, estimators, shared inference
 tests/                         Leakage, dates, schema, and pipeline persistence checks
-requirements.txt               Lightweight standalone dependencies
+requirements.txt               Cloud/local entrypoint for recorded dependencies
 requirements-lock.txt          Recorded installed package versions
 CONTRIBUTING.md                Contribution and validation guidance
 docs/interface.png             Interface screenshot
 docs/evaluation.json           Aggregate reference-run measurements
 docs/PUBLISHING.md              Initial GitHub publishing instructions
+docs/DEPLOYMENT.md              Streamlit cloud deployment and troubleshooting
 .github/workflows/tests.yml     Automated unit-test workflow
 data/raw/incident_event_log.csv Dataset, created by downloader
-models/resolution_model.joblib  Pipeline and metadata, created by training
+models/resolution_model.joblib  Selected trained pipeline included for cloud inference
 results/metrics.json            Cleaning, comparisons, holdouts, limitations, versions
 results/test_predictions.csv    Actual and predicted hours for held-out incidents
 results/validation_comparison.csv
@@ -180,7 +195,7 @@ results/historical_categories.csv
 
 Use the same environment for training and inference; the app checks the saved scikit-learn version. Only load your own trusted joblib artifact. The recorded model environment uses Python **3.11.17**, NumPy **2.4.6**, pandas **3.1.0**, scikit-learn **1.9.1**, and joblib **1.6.0**.
 
-`requirements-lock.txt` captures installed versions read from the existing environment without reinstalling it during repository preparation. It is an environment snapshot, not a hash-locked cross-platform build guarantee. Use `requirements.txt` if compatible version ranges are preferable, and retrain in that environment.
+`requirements-lock.txt` captures installed versions read from the existing environment without reinstalling it during repository preparation. It is an environment snapshot, not a hash-locked cross-platform build guarantee. `requirements.txt` includes this file for deployment. If changing dependency versions, validate the new environment and retrain rather than assuming the old artifact is compatible.
 
 ## Checks to run
 

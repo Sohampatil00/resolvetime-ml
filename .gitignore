@@ -9,7 +9,9 @@ htmlcov/
 .mypy_cache/
 .ruff_cache/
 data/
-models/
+# Include only the selected model needed by Streamlit Community Cloud.
+models/*
+!models/resolution_model.joblib
 results/
 .env
 .env.*
