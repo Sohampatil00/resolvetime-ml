@@ -1,0 +1,119 @@
+{
+  "trained_utc": "2026-10-30T18:02:52.654311+00:00",
+  "selected_model": "k-NN Regression",
+  "selection_metric": "validation MAE in hours",
+  "dataset_sha256": "fd184bbfd62329cfe093e99da2ea7071905f2ead91900b448eb2635870821bef",
+  "dataset_audit": {
+    "event_rows": 141712,
+    "unique_incidents": 24918,
+    "incidents_without_initial_snapshot": 5,
+    "initial_snapshots": 24913,
+    "invalid_opening_dates": 0,
+    "unknown_resolution": 1556,
+    "negative_or_invalid_durations": 0,
+    "usable_resolved_incidents": 23357,
+    "excluded_rows_without_incident_id": 0
+  },
+  "split": {
+    "validation_start": "2016-09-15T00:00:00",
+    "test_start": "2016-12-22T00:00:00",
+    "train": 22968,
+    "validation": 61,
+    "test": 154,
+    "final_training": 23176,
+    "train_labels_unavailable_at_cutoff": 160,
+    "validation_labels_unavailable_at_cutoff": 14,
+    "pretest_labels_unavailable_at_cutoff": 27
+  },
+  "cv_folds": 3,
+  "validation_comparison": [
+    {
+      "model": "Median baseline",
+      "cv_mae_hours": null,
+      "mae_hours": 126.37759562841532,
+      "rmse_hours": 269.84984917913823,
+      "median_absolute_error_hours": 21.116666666666664,
+      "r2": -0.17962211043005305,
+      "tickets": 61,
+      "best_parameters": {}
+    },
+    {
+      "model": "Linear Regression",
+      "cv_mae_hours": 54.174326661662484,
+      "mae_hours": 2566.953962208189,
+      "rmse_hours": 3827.173320773644,
+      "median_absolute_error_hours": 2235.713707795826,
+      "r2": -236.2765427996555,
+      "tickets": 61,
+      "best_parameters": {
+        "regressor__model__fit_intercept": false
+      }
+    },
+    {
+      "model": "k-NN Regression",
+      "cv_mae_hours": 55.0021633267213,
+      "mae_hours": 126.36068633133385,
+      "rmse_hours": 265.7737496726214,
+      "median_absolute_error_hours": 32.77464827449616,
+      "r2": -0.14425471927728362,
+      "tickets": 61,
+      "best_parameters": {
+        "regressor__model__n_neighbors": 15,
+        "regressor__model__weights": "uniform"
+      }
+    },
+    {
+      "model": "Gradient Boosting",
+      "cv_mae_hours": 57.00696119877866,
+      "mae_hours": 137.18889834848167,
+      "rmse_hours": 266.5108823678967,
+      "median_absolute_error_hours": 46.6883964940851,
+      "r2": -0.15061078160163688,
+      "tickets": 61,
+      "best_parameters": {
+        "regressor__model__learning_rate": 0.05,
+        "regressor__model__max_leaf_nodes": 7
+      }
+    }
+  ],
+  "test": {
+    "mae_hours": 147.69180716923753,
+    "rmse_hours": 269.7620301870017,
+    "median_absolute_error_hours": 39.50181422682209,
+    "r2": -0.2595340553913634,
+    "tickets": 154
+  },
+  "test_median_baseline": {
+    "mae_hours": 144.9508658008658,
+    "rmse_hours": 272.69957552600533,
+    "median_absolute_error_hours": 21.875,
+    "r2": -0.2871145376165596,
+    "tickets": 154
+  },
+  "missing_inputs_in_final_training": {
+    "category": 26,
+    "subcategory": 55,
+    "contact_type": 0,
+    "impact": 0,
+    "urgency": 0
+  },
+  "training_seconds": 9.98,
+  "versions": {
+    "python": "3.11.17",
+    "numpy": "2.4.6",
+    "pandas": "3.1.0",
+    "scikit_learn": "1.9.1",
+    "joblib": "1.6.0"
+  },
+  "limitations": [
+    "Anonymized records from one company's historical incident process; not validated on other organizations.",
+    "Only incidents with sys_mod_count=0 and a known nonnegative resolution duration are modeled.",
+    "Unresolved incidents are excluded; metrics may underrepresent very long unresolved cases.",
+    "Snapshots for training and validation must have outcomes known before their respective next time cutoff.",
+    "Opening snapshots are the first captured system version; ticket opening times may precede system recording.",
+    "Categories are anonymized codes. Their real-world problem names cannot be recovered from this dataset.",
+    "Forecasts are elapsed clock hours, including nights and weekends, not business hours or SLA guarantees.",
+    "The source does not document the timezone. Enter all input timestamps in a consistent timezone.",
+    "The final selected model and median baseline are evaluated on test; test is not used for model selection."
+  ]
+}
